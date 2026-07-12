@@ -1,4 +1,19 @@
-X THREAD — The environment over the chaos (short version, 3 tweets, all ≤280)
+X THREAD — The environment over the chaos (context-hook version, 4 tweets, all ≤280)
+Hook: the #1 blocker with LLMs on big tasks/epics is manually re-loading context.
+Attach assets/hook.png to tweet 1 (the ritual-vs-environment panel, made for this hook);
+assets/scheme.png to tweet 4 (the full scheme), or leave tweet 4 text-only.
+
+1/ The real blocker with LLMs isn't intelligence anymore — it's context. Every big task starts with the same ritual: re-explaining the project to the model. What's decided, what's in progress, what's stuck. The smarter the model, the more this ritual costs. 🧵
+
+2/ You can't fix this with a bigger context window. The project's state has to live somewhere outside the chat — and stay current on its own. Not another wiki to maintain: an environment that builds itself from what the team already produces. Chats, tickets, mail, commits.
+
+3/ The hard part isn't collecting the stream — it's keeping the structure honest. Our rule: facts are permanent, interpretations are disposable. Delete any topic and the system rebuilds it from raw facts. If nothing is lost, the structure never becomes a second job.
+
+4/ The payoff: any person — or any agent — gets the current state of the project in their own view, instead of an hour of archaeology. That's the essay: how such an environment is built, layer by layer 👇 https://github.com/maaakso/environment-over-chaos
+#ContextEngineering #AIAgents
+
+
+— Original short version (3 tweets, "state" hook) —
 Attach assets/scheme_tweet.png to tweet 1 (the simple waterfall scheme).
 Attach assets/scheme.png to tweet 3 (the full scheme), or leave tweet 3 text-only.
 

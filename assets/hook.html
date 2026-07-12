@@ -1,0 +1,69 @@
+<title>The context ritual — hook illustration</title>
+<style>
+  :root{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --flow:#2A8A5F; --env-bg:#F3FAF6; --bad:#B4552D; --bad-bg:#FBF4F0;
+  }
+  *{box-sizing:border-box;}
+  html{background:var(--paper); height:100%;}
+  body{background:var(--paper); color:var(--ink); margin:0;
+    font-family:"Avenir Next","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    width:1600px; height:760px; overflow:hidden; padding:46px 64px 34px;}
+  h1{font-size:38px; margin:0 0 8px; letter-spacing:-.01em;}
+  p.sub{color:var(--muted); font-size:21px; margin:0 0 30px; line-height:1.4;}
+  .panels{display:flex; gap:36px; align-items:stretch;}
+  .panel{flex:1; border-radius:18px; padding:24px 28px; display:flex; flex-direction:column;}
+  .panel h2{font-size:21px; margin:0 0 16px; letter-spacing:.05em; text-transform:uppercase;}
+  .left{background:var(--bad-bg); border:2px solid var(--bad);}
+  .left h2{color:var(--bad);}
+  .right{background:var(--env-bg); border:3px solid var(--flow);}
+  .right h2{color:var(--flow);}
+  .box{background:var(--card); border:1.5px solid var(--line); border-radius:13px;
+    padding:13px 20px; font-size:19px; line-height:1.42; color:var(--muted);}
+  .box b{color:var(--ink); font-weight:600;}
+  .arr{align-self:center; width:0; height:0; margin:9px 0;
+    border-left:12px solid transparent; border-right:12px solid transparent;}
+  .arr.red{border-top:16px solid var(--bad);}
+  .arr.green{border-top:16px solid var(--flow);}
+  .arr.green-up{border-bottom:16px solid var(--flow);}
+  .box.ws{border:2px solid var(--flow); background:#FFFFFF;}
+  .repeat{color:var(--bad); font-size:18px; font-weight:600; text-align:center; margin-top:auto; padding-top:14px;}
+  .once{color:var(--flow); font-size:18px; font-weight:600; text-align:center; margin-top:auto; padding-top:14px;}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:9px;}
+  .chip{background:var(--paper); border:1.5px solid var(--line); border-radius:999px;
+    padding:4px 13px; font-size:16px; color:var(--muted);}
+  footer{color:var(--muted); font-size:18px; margin-top:26px; display:flex; justify-content:space-between;}
+</style>
+
+<h1>The smarter the model, the more the context ritual costs</h1>
+<p class="sub">A project never loses information. It loses its state — and someone has to hand that state to the model, every time.</p>
+
+<div class="panels">
+  <div class="panel left">
+    <h2>Today — the context ritual</h2>
+    <div class="box"><b>You, before every big task:</b> dig through chats, tickets, mail, docs…
+      <div class="chips"><span class="chip">what’s decided?</span><span class="chip">what’s in progress?</span><span class="chip">what’s stuck?</span></div>
+    </div>
+    <div class="arr red"></div>
+    <div class="box"><b>Paste it all into the chat.</b> The model starts smart — about a project it learned five minutes ago.</div>
+    <div class="arr red"></div>
+    <div class="box"><b>New teammate? Agent with tool access? New chat?</b> Same archaeology, from scratch.</div>
+    <div class="repeat">↻ repeat for every task, every epic, every new chat</div>
+  </div>
+
+  <div class="panel right">
+    <h2>With an environment</h2>
+    <div class="box"><b>You just ask.</b> “Where is the migration epic stuck?” No digging, no paste.</div>
+    <div class="arr green"></div>
+    <div class="box"><b>The agent, in its role,</b> checks its short working memory — and reads the workspace.</div>
+    <div class="arr green"></div>
+    <div class="box ws"><b>Workspace — the current state of the project.</b> Topics, decisions, trajectories. Facts are permanent, interpretations are disposable.</div>
+    <div class="arr green-up"></div>
+    <div class="box"><b>The stream the team already produces</b> flows in on its own:
+      <div class="chips"><span class="chip">chats</span><span class="chip">tickets</span><span class="chip">mail</span><span class="chip">meetings</span><span class="chip">commits</span></div>
+    </div>
+    <div class="once">nobody files anything twice</div>
+  </div>
+</div>
+
+<footer><span>The test is erasure: delete a topic, rebuild it from raw facts — nothing is lost.</span><span>github.com/maaakso/environment-over-chaos</span></footer>

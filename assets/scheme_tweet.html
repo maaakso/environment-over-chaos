@@ -1,0 +1,59 @@
+<title>The environment over the chaos — tweet scheme</title>
+<style>
+  :root{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --flow:#2A8A5F; --env-bg:#F3FAF6; --pane:#FBFCFD;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--paper); color:var(--ink); margin:0;
+    font-family:"Avenir Next","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    width:1310px; height:1024px; overflow:hidden; padding:44px 70px 36px;}
+  h1{font-size:34px; margin:0 0 8px; letter-spacing:-.01em;}
+  p.sub{color:var(--muted); font-size:19px; margin:0 0 26px; line-height:1.4;}
+  .col{display:flex; flex-direction:column; align-items:stretch;}
+  .stage{background:var(--card); border:2px solid var(--line); border-radius:16px;
+    padding:16px 24px 15px;}
+  .stage h2{font-size:20px; margin:0 0 3px; color:var(--flow); letter-spacing:.04em; text-transform:uppercase;}
+  .stage p{margin:0; font-size:18px; color:var(--muted); line-height:1.4;}
+  .stage p b{color:var(--ink); font-weight:600;}
+  .arrow{align-self:center; width:0; height:0; margin:10px 0;
+    border-left:14px solid transparent; border-right:14px solid transparent;
+    border-top:18px solid var(--flow);}
+  .ws{background:var(--env-bg); border:3px solid var(--flow);}
+  .ws .rows{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
+  .row{background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+    padding:10px 18px; font-size:18px; line-height:1.4; color:var(--muted);}
+  .row b{color:var(--ink); font-weight:600;}
+  footer{color:var(--muted); font-size:17px; margin-top:22px; display:flex; justify-content:space-between;}
+</style>
+
+<h1>The environment over the chaos</h1>
+<p class="sub">A project never loses information. It loses its state. The workspace can rebuild that state itself — on top of the tools the project already uses.</p>
+
+<div class="col">
+  <div class="stage">
+    <h2>① Contributors</h2>
+    <p><b>People · bots &amp; agents · services.</b> Work happens where it always did — nothing is filed twice, no one moves anywhere.</p>
+  </div>
+  <div class="arrow"></div>
+  <div class="stage">
+    <h2>② Sources</h2>
+    <p><b>Messenger, mail, calendar, tracker, knowledge base, repository.</b> One append-only stream of observations — interpretations never rewrite the past.</p>
+  </div>
+  <div class="arrow"></div>
+  <div class="stage">
+    <h2>③ Attach + Discovery, under the validation gate</h2>
+    <p><b>Deterministic pipeline:</b> hard identity anchors bind facts to topics, discovery finds new work; derived structure passes the environment's own rules. The LLM sees only the residual doubt.</p>
+  </div>
+  <div class="arrow"></div>
+  <div class="stage ws">
+    <h2>④ Workspace — the environment</h2>
+    <div class="rows">
+      <div class="row"><b>The unit — topics:</b> a core that attracts, a halo that never does. One wrong attach stays one wrong attach. Death by default; rollback = one operation.</div>
+      <div class="row"><b>The property — trajectory:</b> not just state but a movement vector. Activity is not progress.</div>
+      <div class="row"><b>The view — projections:</b> one factual world; role views × attention tiers (focus · periphery · background).</div>
+    </div>
+  </div>
+</div>
+
+<footer><span>The test is erasure: delete a topic, rebuild it from observations — nothing is lost.</span><span>github.com/maaakso/environment-over-chaos</span></footer>
