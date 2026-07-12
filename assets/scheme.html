@@ -1,0 +1,275 @@
+<title>The environment over the chaos — scheme</title>
+<style>
+  :root{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --flow:#2A8A5F; --facts:#2F6FB4; --human:#3A4756;
+    --env-bg:#F3FAF6; --chip:#F1F4F7; --pane:#FBFCFD;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#11161C; --card:#1A222B; --ink:#E4EAF0; --muted:#8FA0B0; --line:#2D3945;
+      --flow:#57BA8C; --facts:#6FA8DF; --human:#B4C2CF;
+      --env-bg:#16261F; --chip:#232D38; --pane:#161D25;
+    }
+  }
+  :root[data-theme="dark"]{
+      --paper:#11161C; --card:#1A222B; --ink:#E4EAF0; --muted:#8FA0B0; --line:#2D3945;
+      --flow:#57BA8C; --facts:#6FA8DF; --human:#B4C2CF;
+      --env-bg:#16261F; --chip:#232D38; --pane:#161D25;
+  }
+  :root[data-theme="light"]{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --flow:#2A8A5F; --facts:#2F6FB4; --human:#3A4756;
+    --env-bg:#F3FAF6; --chip:#F1F4F7; --pane:#FBFCFD;
+  }
+  body{background:var(--paper); color:var(--ink);
+    font-family:"Avenir Next","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    margin:0; padding:28px 20px 48px;}
+  .wrap{max-width:1280px; margin:0 auto;}
+  header h1{font-size:1.45rem; margin:0 0 6px; letter-spacing:-.01em; text-wrap:balance;}
+  header p.sub{color:var(--muted); margin:0 0 18px; font-size:.95rem; max-width:82ch; line-height:1.45;}
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card);}
+  .canvas{position:relative; width:1240px; height:1088px;}
+  svg.arrows{position:absolute; inset:0; width:1240px; height:1088px; pointer-events:none;}
+  .arrows .flow{stroke:var(--flow);}
+  .arrows .lead{stroke:var(--human); opacity:.6;}
+  .arrows line, .arrows polyline{fill:none; stroke-width:2.5;}
+  .arrows .dash{stroke-dasharray:6 5; stroke-width:2;}
+
+  .box{position:absolute; background:var(--card); border:1.5px solid var(--line);
+    border-radius:12px; padding:11px 14px; box-sizing:border-box;}
+  .box h2{font-size:.8rem; margin:0 0 3px; letter-spacing:.06em; text-transform:uppercase; color:var(--flow);}
+  .box h2 .n{color:var(--muted); font-weight:600; margin-right:4px;}
+  .box .cap{font-size:.73rem; color:var(--muted); margin:0 0 6px; line-height:1.4;}
+  .box .cap:last-child{margin-bottom:0;}
+  .box .list{font-size:.76rem; margin:0 0 2px; line-height:1.45;}
+  .duo{display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:.71rem; line-height:1.4;}
+  .duo .cell{border:1px solid var(--line); border-radius:8px; padding:7px 9px; background:var(--pane);}
+  .duo b{display:block; font-size:.73rem; margin-bottom:2px;}
+  .duo .hot b{color:var(--flow);}
+  .duo .hot{border-color:var(--flow); background:var(--env-bg);}
+
+  .st1{left:40px; top:20px;  width:560px; height:132px;}
+  .st2{left:40px; top:180px; width:560px; height:106px;}
+  .st3{left:40px; top:314px; width:560px; height:272px;}
+
+  .ws{left:40px; top:614px; width:560px; height:458px; background:var(--env-bg);
+    border-color:var(--flow); border-width:2px;}
+  .wsub{border:1px solid var(--line); border-radius:9px; padding:8px 10px;
+    background:var(--card); margin-top:8px;}
+  .wsub .role{font-size:.6rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600; color:var(--muted);}
+  .wsub b.t{display:block; font-size:.74rem; margin:1px 0 2px;}
+  .wsub p{margin:0; font-size:.7rem; color:var(--muted); line-height:1.4;}
+  .wsub .duo{margin-top:6px;}
+
+  .eyebrow{position:absolute; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600; color:var(--muted);}
+  .legendline{display:flex; flex-wrap:wrap; gap:18px; margin:0 0 16px; padding:0; list-style:none;
+    font-size:.78rem; color:var(--muted);}
+  .legendline li{display:flex; align-items:center; gap:8px;}
+  .sw{width:28px; height:0; border-top:2.5px solid var(--flow); flex:none;}
+  .sw.dash{border-top:2px dashed var(--human); opacity:.7;}
+
+  /* ---------- UI mockups ---------- */
+  .mock{position:absolute; background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+    box-sizing:border-box; overflow:hidden; font-size:.7rem; line-height:1.4;}
+  .mock .bar{display:flex; align-items:center; gap:6px; padding:7px 12px;
+    border-bottom:1px solid var(--line); background:var(--chip); color:var(--muted); font-size:.68rem;}
+  .mock .dot{width:8px; height:8px; border-radius:50%; background:var(--line); flex:none;}
+  .mock .body{padding:10px 12px;}
+  .tag{display:inline-block; background:var(--chip); border:1px solid var(--line); border-radius:6px;
+    padding:2px 7px; font-size:.64rem; color:var(--muted); margin-right:4px;}
+  .pill{display:inline-block; border:1px solid var(--line); border-radius:999px;
+    padding:2px 8px; font-size:.62rem; color:var(--muted);}
+  .mk-eyebrow{font-size:.6rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600;
+    color:var(--facts); margin:9px 0 3px;}
+  .mk-eyebrow:first-child{margin-top:0;}
+
+  .board{left:660px; top:60px; width:540px; height:360px;}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .col h4{font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 6px;}
+  .col h4 b{color:var(--ink);}
+  .tcard{border:1px solid var(--line); border-radius:9px; padding:8px 9px; margin-bottom:8px; background:var(--pane);}
+  .tcard.disco{border-left:3px solid var(--flow);}
+  .tcard.work{border-left:3px solid var(--facts);}
+  .tcard b{display:block; font-size:.7rem; margin:3px 0 3px;}
+  .tcard p{margin:0 0 5px; color:var(--muted); font-size:.66rem;}
+  .tcard .who{color:var(--muted); font-size:.62rem;}
+  .acts{display:flex; gap:4px; flex-wrap:wrap; margin-top:5px;}
+  .act{border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:.6rem; color:var(--muted);}
+  .act.pin{color:var(--flow); border-color:var(--flow);}
+
+  .tcardfull{left:660px; top:470px; width:540px; height:450px;}
+  .tcardfull h3{font-size:.82rem; margin:0 0 5px;}
+  .tcardfull .desc{margin:0; color:var(--ink); font-size:.68rem;}
+  .agr{margin:0; padding-left:14px; color:var(--ink); font-size:.68rem;}
+  .agr li{margin:1px 0;}
+  .src{border-top:1px dashed var(--line); padding:4px 0; color:var(--muted); font-size:.64rem;}
+  .src:first-of-type{border-top:none;}
+  .src b{color:var(--ink); font-weight:600;}
+  .src.reply{margin-left:16px; border-left:2px solid var(--line); padding-left:8px;}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>The environment over the chaos</h1>
+  <p class="sub">Companion scheme for “A project never loses information. It loses its state.” One waterfall: people and agents keep working where they always did; on top of that stream the workspace — the environment itself — builds and maintains itself: topics are its units, the temporal model is its property, projections are how it is displayed.</p>
+<ul class="legendline">
+  <li><span class="sw"></span>the flow — facts become structure</li>
+  <li><span class="sw dash"></span>illustrated by a UI example</li>
+</ul>
+</header>
+
+<div class="scroll"><div class="canvas">
+
+<svg class="arrows" viewBox="0 0 1240 1088" aria-hidden="true">
+  <defs>
+    <marker id="m-flow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--flow)"></path>
+    </marker>
+    <marker id="m-lead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--human)" opacity=".6"></path>
+    </marker>
+  </defs>
+
+  <!-- the waterfall -->
+  <line class="flow" x1="320" y1="152" x2="320" y2="176" marker-end="url(#m-flow)"></line>
+  <line class="flow" x1="320" y1="286" x2="320" y2="310" marker-end="url(#m-flow)"></line>
+  <line class="flow" x1="320" y1="586" x2="320" y2="610" marker-end="url(#m-flow)"></line>
+
+  <!-- leaders to UI examples -->
+  <polyline class="lead dash" points="600,640 628,640 628,240 654,240" marker-end="url(#m-lead)"></polyline>
+  <polyline class="lead dash" points="600,746 628,746 628,770 654,770" marker-end="url(#m-lead)"></polyline>
+</svg>
+
+<div class="box st1">
+  <h2><span class="n">①</span>Contributors</h2>
+  <p class="cap">Work happens where it always did — nothing is filed twice, no one moves anywhere.</p>
+  <div class="duo" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="cell"><b>People</b>The team: messages, decisions, documents.</div>
+    <div class="cell"><b>Agents</b>Bots and AI agents: results of their work.</div>
+    <div class="cell"><b>Services</b>Information systems, events and triggers.</div>
+  </div>
+</div>
+
+<div class="box st2">
+  <h2><span class="n">②</span>Sources</h2>
+  <p class="cap">Connectors normalize events into one append-only stream of observations, with links back to the originals — interpretations never rewrite the past.</p>
+  <p class="list">Messenger, mail, calendar, tracker, knowledge base, repository, analytics.</p>
+</div>
+
+<div class="box st3">
+  <h2><span class="n">③</span>Attach + Discovery</h2>
+  <p class="cap">Deterministic pipeline: local, reproducible, versioned. The LLM sees only the residual doubt.</p>
+  <div class="wsub" style="margin-top:0">
+    <span class="role">The gate</span>
+    <b class="t">Validation — a law of the environment</b>
+    <p>Derived structure earns its place through the environment's own rules: accuracy, completeness, consistency, usefulness, stability. The law is shared, the checks are tuned per source and contributor — different costs of error, different levels of trust.</p>
+  </div>
+  <div class="duo" style="margin-top:8px">
+    <div class="cell"><b>Attach — known topics</b>Structural anchors first (thread, ticket, email chain, anchor post); semantics only as a floor; residual doubt → LLM or human.</div>
+    <div class="cell"><b>Discovery — new work</b>Clusters of unattached observations → hypothesis topics. Identity survives recompute: insert · extend · merge · split · close · fade · reopen.</div>
+  </div>
+</div>
+
+<div class="box ws">
+  <h2><span class="n">④</span>Workspace — the environment</h2>
+  <p class="cap">The part of the world that survives reasoning. Derived from observations, recomputable, self-maintaining — nobody curates a board.</p>
+
+  <div class="wsub">
+    <span class="role">The unit</span>
+    <b class="t">Topic — one line of work</b>
+    <p>What it is, what grounds its identity, what context it carries, what state it is in, where it is going. Death by default; rollback = one operation.</p>
+    <div class="duo">
+      <div class="cell hot"><b>Core</b>Hard identity anchors only. Defines the profile and attracts new observations.</div>
+      <div class="cell"><b>Halo</b>Semantic context. Visible to people and agents; never attracts.</div>
+    </div>
+  </div>
+
+  <div class="wsub">
+    <span class="role">The property</span>
+    <b class="t">Temporal model — state and trajectory</b>
+    <p>Sequence of states → movement vector, served with confidence. Activity is not progress: what happens now vs where it is going.</p>
+  </div>
+
+  <div class="wsub">
+    <span class="role">The view</span>
+    <b class="t">Projection layer — one world, many views</b>
+    <p>Each role — product manager, analyst, developer, lead, agent — reads the same facts through its own projection and attention tiers: focus acts and decides, periphery updates silently, background returns on a signal.</p>
+  </div>
+</div>
+
+<!-- ---------- UI examples ---------- -->
+<div class="eyebrow" style="left:660px; top:28px;">UI examples</div>
+
+<div class="mock tcardfull">
+  <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>A topic card — one line of work with its full context</div>
+  <div class="body">
+    <h3>New sign-up flow (TASK-101)</h3>
+    <div style="margin-bottom:4px">
+      <span class="tag">Requirements</span><span class="tag">Watching</span><span class="tag">Task</span>
+    </div>
+    <div class="mk-eyebrow">Description</div>
+    <p class="desc">(1) Agree on the final scope of the new sign-up flow. (2) Status: requirements are drafted and waiting for review. (3) Blocks the next release.</p>
+    <div class="mk-eyebrow">Latest agreements</div>
+    <ul class="agr">
+      <li>The scope is limited to steps 1–3</li>
+      <li>Owner: A. Smith</li>
+      <li>Review is scheduled for Monday</li>
+    </ul>
+    <div class="mk-eyebrow">Participants</div>
+    <div><span class="tag">@a.smith</span><span class="tag">@b.jones</span><span class="tag">@c.lee</span><span class="tag">@d.kim</span><span class="tag">+5</span></div>
+    <div class="mk-eyebrow">Linked</div>
+    <div style="margin-bottom:2px"><b style="font-size:.68rem">TASK-101</b> <span style="color:var(--muted)">New sign-up flow</span> <span class="pill">In review</span></div>
+    <div class="mk-eyebrow">Sources (24) — every fact links to its origin</div>
+    <div class="src"><b>17:19 · B. Jones (tracker)</b> — [TASK-101] Ticket updated: new sign-up flow</div>
+    <div class="src"><b>12:59 · @a.smith · #project-alpha</b> — Team, let's settle the open questions on the flow… <span class="pill">+8 replies</span></div>
+    <div class="src reply"><b>15:39 · @c.lee</b> — Do we keep the email confirmation step in scope?</div>
+    <div class="src reply"><b>15:44 · @a.smith</b> — Yes, it stays; everything else moves to phase two</div>
+  </div>
+</div>
+
+<div class="mock board">
+  <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>The workspace board — a role's projection with attention tiers</div>
+  <div class="body">
+    <div style="margin-bottom:8px">
+      <span class="tag">1 day + triggers</span><span class="tag">Digest</span><span class="tag">Search…</span>
+      <span class="pill">release ×</span> <span class="pill">team-alpha ×</span>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <h4><b>In work</b> · confirmed topics</h4>
+        <div class="tcard work">
+          <span class="tag">pinned</span><span class="tag">Task</span>
+          <b>New sign-up flow</b>
+          <p>Scope agreed, implementation in progress; review is scheduled for Monday.</p>
+          <span class="who">@a.smith</span>
+        </div>
+        <div class="tcard work">
+          <span class="tag">Watching</span>
+          <b>Mobile release 2.4</b>
+          <p>Release checklist in progress; two blockers left, both owned and on track.</p>
+          <span class="who">@b.jones</span>
+        </div>
+      </div>
+      <div class="col">
+        <h4><b>Discovery</b> · hypothesis topics</h4>
+        <div class="tcard disco">
+          <b>Dashboard is slow to load</b>
+          <p>Several reports of slow loading; actively discussed, no owner yet.</p>
+          <div class="acts"><span class="act pin">Pin</span><span class="act">Noise</span><span class="act">Not a priority</span><span class="act">Duplicate</span></div>
+        </div>
+        <div class="tcard disco">
+          <b>Duplicate email notifications</b>
+          <p>Users receive the same notification twice; needs confirmation and a ticket.</p>
+          <div class="acts"><span class="act pin">Pin</span><span class="act">Noise</span><span class="act">Not a priority</span><span class="act">Duplicate</span></div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:4px 0 0; color:var(--muted); font-size:.62rem;">One click on a discovery card is both a user action and a training signal.</p>
+  </div>
+</div>
+
+</div></div>
+
+<footer style="color:var(--muted); font-size:.78rem; margin-top:14px; max-width:84ch; line-height:1.5;">The observation stream is the source of truth; the workspace is a recomputable projection of it. The test is erasure: delete a topic and rebuild it from raw observations — if nothing is lost, facts and interpretation are properly separated.</footer>
+</div>
