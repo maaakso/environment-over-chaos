@@ -1,0 +1,28 @@
+X THREAD — The environment over the chaos (short version, 3 tweets, all ≤280)
+Attach assets/scheme_tweet.png to tweet 1 (the simple waterfall scheme).
+Attach assets/scheme.png to tweet 3 (the full scheme), or leave tweet 3 text-only.
+
+1/ A project never loses information. It loses its state: what's decided, what's moving, what's stuck. Every status meeting is a manual rebuild of the project from its history. Sequel to "environment, not memory": the environment can build itself over the chaos. 🧵
+
+2/ It ingests the stream the work already produces — append-only, nobody files anything twice. Topics grow around hard identity anchors: a core that attracts and a halo that never does, so one wrong attach stays one wrong attach. Topics die by default; rollback is one operation.
+
+3/ One factual world, many views: role projections × attention tiers (focus / periphery / background). The human distributes attention — gestures are training signals. Autonomy is earned per tier, by metrics. Essay + scheme 👇 https://github.com/maaakso/environment-over-chaos
+
+#AIAgents #ContextEngineering #ProjectManagement
+
+
+— Long version (7 tweets), if ever needed —
+
+1/ A project never loses information. It loses its state: what's decided, what's moving, what's stuck. A new hire, a lead before a status meeting, an agent with tool access — all rebuild the project from its history, every time. The bigger the project, the more it costs. 🧵
+
+2/ The classic answer is discipline: a single source of truth, groomed tickets, decision logs. That order exists only under constant manual effort. The alternative: don't move the project into one more store — build a working environment on top of the systems that already exist.
+
+3/ Four layers: an append-only observation stream (the source of truth), derived structure (recomputable, never truth), a temporal model (state AND trajectory), role projections. The test is erasure: delete a topic, rebuild it from observations — if nothing is lost, it's built right.
+
+4/ The unit is a topic: one line of work. It splits into a core (hard identity anchors only — thread, ticket, email chain; it defines the profile and attracts) and a halo (semantic context — visible, never attracts). One wrong attach stays one wrong attach. That kills the snowball.
+
+5/ Interpretations enter only through a validation gate — the environment's own law: accuracy, completeness, consistency, usefulness, stability. Shared law, tuned checks: review for people, deterministic pipelines and metrics for agents. Different costs of error, different trust.
+
+6/ The human is the navigator, not the moderator: distributes attention, resolves ambiguity. Pin, noise, duplicate — every gesture is a training signal. Autonomy is handed over tier by tier — background, periphery, focus — on measured agreement, not trust. Always reversible.
+
+7/ None of the parts are new — event sourcing, TDT, DBSCAN's core/border/noise, bi-temporal facts, role-based views. The composition might be: all of it assembled into a project's environment. Essay + scheme 👇 https://github.com/maaakso/environment-over-chaos
