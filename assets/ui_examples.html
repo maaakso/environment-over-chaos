@@ -1,0 +1,125 @@
+<title>UI examples — workspace board and topic card</title>
+<style>
+  :root{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --flow:#2A8A5F; --facts:#2F6FB4; --env-bg:#F3FAF6; --chip:#F1F4F7; --pane:#FBFCFD;
+  }
+  *{box-sizing:border-box;}
+  html{background:var(--paper); height:100%;}
+  body{background:var(--paper); color:var(--ink); margin:0; overflow:hidden;
+    font-family:"Avenir Next","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    width:1240px; padding:30px 40px 26px; font-size:.7rem; line-height:1.4;}
+  .row{display:flex; gap:28px; align-items:stretch;}
+  .mock{background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+    overflow:hidden; flex:1;}
+  .mock .bar{display:flex; align-items:center; gap:6px; padding:7px 12px;
+    border-bottom:1px solid var(--line); background:var(--chip); color:var(--muted); font-size:.68rem;}
+  .mock .dot{width:8px; height:8px; border-radius:50%; background:var(--line); flex:none;}
+  .mock .body{padding:10px 12px;}
+  .tag{display:inline-block; background:var(--chip); border:1px solid var(--line); border-radius:6px;
+    padding:2px 7px; font-size:.64rem; color:var(--muted); margin-right:4px;}
+  .pill{display:inline-block; border:1px solid var(--line); border-radius:999px;
+    padding:2px 8px; font-size:.62rem; color:var(--muted);}
+  .mk-eyebrow{font-size:.6rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600;
+    color:var(--facts); margin:9px 0 3px;}
+  .mk-eyebrow:first-child{margin-top:0;}
+
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .col h4{font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 6px;}
+  .col h4 b{color:var(--ink);}
+  .tcard{border:1px solid var(--line); border-radius:9px; padding:8px 9px; margin-bottom:8px; background:var(--pane);}
+  .tcard.disco{border-left:3px solid var(--flow);}
+  .tcard.work{border-left:3px solid var(--facts);}
+  .tcard b{display:block; font-size:.7rem; margin:3px 0 3px;}
+  .tcard p{margin:0 0 5px; color:var(--muted); font-size:.66rem;}
+  .tcard .who{color:var(--muted); font-size:.62rem;}
+  .acts{display:flex; gap:4px; flex-wrap:wrap; margin-top:5px;}
+  .act{border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:.6rem; color:var(--muted);}
+  .act.pin{color:var(--flow); border-color:var(--flow);}
+
+  h3{font-size:.82rem; margin:0 0 5px;}
+  .desc{margin:0; color:var(--ink); font-size:.68rem;}
+  .agr{margin:0; padding-left:14px; color:var(--ink); font-size:.68rem;}
+  .agr li{margin:1px 0;}
+  .src{border-top:1px dashed var(--line); padding:4px 0; color:var(--muted); font-size:.64rem;}
+  .src:first-of-type{border-top:none;}
+  .src b{color:var(--ink); font-weight:600;}
+  .src.reply{margin-left:16px; border-left:2px solid var(--line); padding-left:8px;}
+  footer{color:var(--muted); font-size:.7rem; margin-top:16px; display:flex; justify-content:space-between;}
+</style>
+
+<div class="row">
+
+<div class="mock">
+  <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>A topic card — one line of work with its full context</div>
+  <div class="body">
+    <h3>QR-code login (AUTH-142)</h3>
+    <div style="margin-bottom:4px">
+      <span class="tag">PRD</span><span class="tag">Released</span><span class="tag">Watching</span>
+    </div>
+    <div class="mk-eyebrow">Description</div>
+    <p class="desc">(1) Log in on TV and desktop by scanning a QR code from the mobile app. (2) Status: released; monitoring after the token-expiry incident. (3) Launch review scheduled for Friday.</p>
+    <div class="mk-eyebrow">Latest agreements</div>
+    <ul class="agr">
+      <li>Scope per PRD v2: mobile scans, TV shows the code</li>
+      <li>Token TTL raised after the prod incident</li>
+      <li>Owner: A. Smith · launch review on Friday</li>
+    </ul>
+    <div class="mk-eyebrow">Participants</div>
+    <div><span class="tag">@a.smith</span><span class="tag">@b.jones</span><span class="tag">@c.lee</span><span class="tag">@d.kim</span><span class="tag">+9</span></div>
+    <div class="mk-eyebrow">Linked</div>
+    <div style="margin-bottom:2px"><b style="font-size:.68rem">AUTH-142</b> <span style="color:var(--muted)">QR-code login</span> <span class="pill">Released</span></div>
+    <div class="mk-eyebrow">Sources (41) — every fact links to its origin</div>
+    <div class="src"><b>09:30 · monitoring</b> — Token-expiry error spike after release; fix deployed, rate back to baseline</div>
+    <div class="src"><b>09:04 · support</b> — User: “the QR code says expired before I even scan it”</div>
+    <div class="src"><b>Tue · B. Jones (tracker)</b> — [AUTH-142] Status → Released</div>
+    <div class="src"><b>3w ago · @a.smith · #product-ideas</b> — What if you could log in on TV by scanning a QR code?… <span class="pill">+14 replies</span></div>
+    <div class="src reply"><b>@c.lee</b> — How do we handle token expiry on the TV side?</div>
+    <div class="src reply"><b>@a.smith</b> — Short TTL, rotate on scan — PRD section 3</div>
+  </div>
+</div>
+
+<div class="mock">
+  <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>The workspace board — a role's projection with attention tiers</div>
+  <div class="body">
+    <div style="margin-bottom:8px">
+      <span class="tag">1 day + triggers</span><span class="tag">Digest</span><span class="tag">Search…</span>
+      <span class="pill">release ×</span> <span class="pill">team-alpha ×</span>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <h4><b>In work</b> · confirmed topics</h4>
+        <div class="tcard work">
+          <span class="tag">pinned</span><span class="tag">PRD</span>
+          <b>QR-code login</b>
+          <p>Released; token-expiry fix verified, launch review with adoption numbers on Friday.</p>
+          <span class="who">@a.smith</span>
+        </div>
+        <div class="tcard work">
+          <span class="tag">Watching</span>
+          <b>Mobile release 2.4</b>
+          <p>Release checklist in progress; two blockers left, both owned and on track.</p>
+          <span class="who">@b.jones</span>
+        </div>
+      </div>
+      <div class="col">
+        <h4><b>Discovery</b> · hypothesis topics</h4>
+        <div class="tcard disco">
+          <b>Dashboard is slow to load</b>
+          <p>Several reports of slow loading; actively discussed, no owner yet.</p>
+          <div class="acts"><span class="act pin">Pin</span><span class="act">Noise</span><span class="act">Not a priority</span><span class="act">Duplicate</span></div>
+        </div>
+        <div class="tcard disco">
+          <b>Duplicate email notifications</b>
+          <p>Users receive the same notification twice; needs confirmation and a ticket.</p>
+          <div class="acts"><span class="act pin">Pin</span><span class="act">Noise</span><span class="act">Not a priority</span><span class="act">Duplicate</span></div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:4px 0 0; color:var(--muted); font-size:.62rem;">One click on a discovery card is both a user action and a training signal.</p>
+  </div>
+</div>
+
+</div>
+
+<footer><span>Nobody curates this board — it is a recomputable projection of the observation stream.</span><span>github.com/maaakso/environment-over-chaos</span></footer>
