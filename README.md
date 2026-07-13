@@ -2,6 +2,17 @@
 
 *Second in the environment series: how a working environment builds itself on top of the tools a project already uses — and stays readable when the world is too large to read.*
 
+> **Status: experimental architecture, currently being tested** on one production workspace. This is an essay, not a framework — a composition of existing approaches I am testing, written down as design laws. See [what is implemented and what is still hypothetical](#status-what-is-implemented-what-is-still-hypothetical).
+
+**TL;DR**
+
+- The recurring cost in any large project is not lost information but lost *state*: what's decided, what's moving, what's stuck. People and LLM agents alike rebuild it from history, every time.
+- Instead of one more store the team must maintain, build the environment on top of the stream work already produces: chats, mail, meetings, tickets, docs, commits.
+- Facts are append-only and permanent; every derived structure (topics, states, views) is a disposable projection. The test is erasure: delete a topic, rebuild it from raw facts, lose nothing.
+- The unit is a topic with a **core** (hard identity anchors — it attracts new facts) and a **halo** (semantic context — it never attracts). That breaks the error-compounding loop.
+- Deterministic pipeline first; the LLM only gets the residual ambiguity. One factual world, many role projections, three attention tiers.
+- The human is the navigator, not the moderator; agent autonomy is earned tier by tier, on metrics, always reversible.
+
 ![The environment over the chaos](assets/scheme.png)
 
 ## The problem
@@ -174,6 +185,31 @@ So the system requires configuring sources, defining anchors, setting up roles, 
 
 But its degradation is reversible: the raw observations stay intact, and topics, vectors and role projections can be recomputed.
 
+## Status: what is implemented, what is still hypothetical
+
+This architecture is being tested on one production workspace (a real team's stream: messenger, mail, calendar, tracker, knowledge base), not shipped as a product. An honest split as of July 2026:
+
+**Implemented and running:**
+
+- append-only ingestion of the observation stream from live sources;
+- the deterministic attach pipeline: identity anchors → contextual checks → semantic filtering → confidence score, with only the residual ambiguity routed to an LLM;
+- core/halo separation of topics;
+- the discovery loop: hypothesis topics, dedup against living topics, lifecycle operations;
+- the improvement loop around it: shadow metrics, eval-gated changes, an LLM reviewer auditing topic births and retirements post-hoc;
+- human gestures as training signals (pin / noise / duplicate) with measured precision.
+
+**Partially implemented, under test:**
+
+- role projections (working views exist; per-role risk computation does not);
+- one-operation rollback (reversibility is enforced by design; the single-gesture operation is being built);
+- staged autonomy — decisions run as suggestions under confirmation; no tier has been handed over yet.
+
+**Still hypothetical (designed, not built):**
+
+- the temporal model as described — movement vectors and aggregate trajectories;
+- attention tiers as a first-class mechanism with per-tier autonomy metrics;
+- the erasure test as a routine, automated check rather than an architectural principle.
+
 ## Prior art
 
 The architecture is a composition of established approaches. **Event sourcing:** facts as an immutable stream, working structures as recomputable projections. **Bi-temporal facts:** a contradiction closes the old fact's validity window instead of deleting anything (Zep/Graphiti, [arXiv:2501.13956](https://arxiv.org/abs/2501.13956)). **Local-first:** the project keeps control of its data and computation. **Topic Detection and Tracking** and **First Story Detection:** topics discovered and tracked in a continuous stream, with discovery deciding whether a signal is a new story or a continuation; the merge/extend/insert operations ran in production at scale in Story Forest ([arXiv:1803.00189](https://arxiv.org/abs/1803.00189)). **DBSCAN:** the split into core points, border points and noise is the prototype of core-and-halo. **Temporal analytics:** state sequences turned into direction and speed. **Role-based views:** one factual model exposed through different representations, relevance and action sets. And the failure the whole design guards against is measured, not hypothetical: naive free-write memories degrade as they grow ([arXiv:2505.16067](https://arxiv.org/abs/2505.16067)) — the anti-compounding machinery exists because of numbers, not paranoia.
@@ -185,3 +221,7 @@ None of the parts are new. What is not established is the composition: all of th
 Don't give the team another place to move their work into. Build the environment over the stream the work already produces: facts in, append-only; interpretations in only through the gate; topics grown around hard identity; a core that attracts and a halo that doesn't; state plus trajectory; one factual world, many role projections; attention in tiers; autonomy earned tier by tier on metrics, with rollback always one operation away.
 
 The environment doesn't remove the chaos, and it doesn't ask anyone to move. It builds, on top of the existing stream, a maintainable model of what is happening, where it is going, and which part of it matters to you.
+
+## License
+
+Text and diagrams: [CC BY 4.0](LICENSE). If code appears in this repository later, it will carry its own permissive license (MIT or Apache-2.0).
