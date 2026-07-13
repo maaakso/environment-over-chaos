@@ -187,27 +187,29 @@ But its degradation is reversible: the raw observations stay intact, and topics,
 
 ## Status: what is implemented, what is still hypothetical
 
-This architecture is being tested on one production workspace (a real team's stream: messenger, mail, calendar, tracker, knowledge base), not shipped as a product. An honest split as of July 2026:
+This architecture is being tested on one production workspace (a real team's stream: messenger, mail, calendar, tracker, knowledge base), not shipped as a product. Two earlier essays describe pieces that are already running: [the improvement loop around the pipeline](https://github.com/maaakso/warehouse-loop) (shadow metrics, eval-gated changes, roles designed to disappear) and [the environment-vs-memory paradigm itself](https://github.com/maaakso/environment-not-memory). An honest split as of July 2026:
 
 **Implemented and running:**
 
-- append-only ingestion of the observation stream from live sources;
-- the deterministic attach pipeline: identity anchors → contextual checks → semantic filtering → confidence score, with only the residual ambiguity routed to an LLM;
-- core/halo separation of topics;
-- the discovery loop: hypothesis topics, dedup against living topics, lifecycle operations;
-- the improvement loop around it: shadow metrics, eval-gated changes, an LLM reviewer auditing topic births and retirements post-hoc;
-- human gestures as training signals (pin / noise / duplicate) with measured precision.
+- append-only ingestion of the observation stream from live sources, with bi-temporal facts: a contradiction closes the old fact's validity window instead of deleting it (~80k observations backfilled);
+- the deterministic attach pipeline — identity anchors → contextual checks → semantic filtering → confidence score — running in shadow mode: every decision journaled, human-assessed against ground truth, only the residual ambiguity routed to an LLM;
+- core/halo separation: the halo never mutates a topic's profile; core precision is measured on owner verdicts;
+- the discovery loop: hourly birth of hypothesis topics, dedup against living topics only, immutable tombstones, a rebirth queue, and an LLM reviewer auditing births and retirements post-hoc;
+- the improvement loop around all of it: shadow metrics, changes gated by a metric target declared before deployment, auto-revert on regression;
+- reversibility in practice: append-only undo journals across every loop; corrections (demote from core, dedup override, rebirth) roll back in one operation;
+- human gestures as training signals: pin, noise, duplicate, return-to-core — collected and used as ground truth.
 
 **Partially implemented, under test:**
 
-- role projections (working views exist; per-role risk computation does not);
-- one-operation rollback (reversibility is enforced by design; the single-gesture operation is being built);
-- staged autonomy — decisions run as suggestions under confirmation; no tier has been handed over yet.
+- role projections: two working view levels exist (the owner's full view vs a restricted scope for a shared agent), and the improvement loop runs on explicit agent roles; the general per-role projection layer with per-role risks is designed, not built;
+- attention tiers: today's working analogs are pins (≈ focus), hypothesis/discovery status (≈ periphery) and noise/archive flags (≈ background); capture of attention events is built but not yet live;
+- the temporal model: staleness and fade signals and trigger-born topics are computed in production; movement vectors as described are not;
+- staged autonomy: the attach pipeline still runs as suggestions under confirmation — no tier has been handed over yet.
 
 **Still hypothetical (designed, not built):**
 
-- the temporal model as described — movement vectors and aggregate trajectories;
-- attention tiers as a first-class mechanism with per-tier autonomy metrics;
+- movement vectors and aggregate trajectories as first-class objects — the topic as a stored trajectory rather than a snapshot with history;
+- attention tiers as a formal mechanism with per-tier budgets and per-tier autonomy metrics;
 - the erasure test as a routine, automated check rather than an architectural principle.
 
 ## Prior art
